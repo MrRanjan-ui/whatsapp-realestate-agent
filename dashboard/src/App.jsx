@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './index.css';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
