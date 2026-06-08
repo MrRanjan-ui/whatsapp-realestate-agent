@@ -2,12 +2,20 @@ import mongoose from 'mongoose';
 import { Property } from './db/models';
 import { config } from './config';
 
-export async function seedDatabase(shouldDisconnect = true) {
+/**
+ * Seeds the properties collection with 52 mock properties.
+ * @param standalone - If true, this function manages its own mongoose connection (for CLI usage).
+ *                     If false, it assumes mongoose is already connected (called from index.ts).
+ */
+export async function seedDatabase(standalone = true) {
   try {
-    console.log(`Connecting to MongoDB at ${config.MONGODB_URI}...`);
-    await mongoose.connect(config.MONGODB_URI);
-    console.log('Connected successfully. Cleaning properties collection...');
+    if (standalone) {
+      console.log(`Connecting to MongoDB at ${config.MONGODB_URI}...`);
+      await mongoose.connect(config.MONGODB_URI);
+      console.log('Connected successfully.');
+    }
 
+    console.log('Cleaning properties collection...');
     await Property.deleteMany({});
 
     const mockProperties = [];
@@ -27,19 +35,19 @@ export async function seedDatabase(shouldDisconnect = true) {
 
     // Generate Rent properties (26 properties)
     const rentPrices = [
-      { text: '₹15,000/mo', val: 15000 },
-      { text: '₹20,000/mo', val: 20000 },
-      { text: '₹25,000/mo', val: 25000 },
-      { text: '₹30,000/mo', val: 30000 },
-      { text: '₹35,000/mo', val: 35000 },
-      { text: '₹40,000/mo', val: 40000 },
-      { text: '₹45,000/mo', val: 45000 },
-      { text: '₹50,000/mo', val: 50000 },
-      { text: '₹60,000/mo', val: 60000 },
-      { text: '₹75,000/mo', val: 75000 },
-      { text: '₹90,000/mo', val: 90000 },
-      { text: '₹1.2 Lakhs/mo', val: 120000 },
-      { text: '₹1.5 Lakhs/mo', val: 150000 }
+      { text: 'Rs. 15,000/mo', val: 15000 },
+      { text: 'Rs. 20,000/mo', val: 20000 },
+      { text: 'Rs. 25,000/mo', val: 25000 },
+      { text: 'Rs. 30,000/mo', val: 30000 },
+      { text: 'Rs. 35,000/mo', val: 35000 },
+      { text: 'Rs. 40,000/mo', val: 40000 },
+      { text: 'Rs. 45,000/mo', val: 45000 },
+      { text: 'Rs. 50,000/mo', val: 50000 },
+      { text: 'Rs. 60,000/mo', val: 60000 },
+      { text: 'Rs. 75,000/mo', val: 75000 },
+      { text: 'Rs. 90,000/mo', val: 90000 },
+      { text: 'Rs. 1.2 Lakhs/mo', val: 120000 },
+      { text: 'Rs. 1.5 Lakhs/mo', val: 150000 }
     ];
 
     for (let i = 0; i < 26; i++) {
@@ -71,19 +79,19 @@ export async function seedDatabase(shouldDisconnect = true) {
 
     // Generate Buy properties (26 properties)
     const buyPrices = [
-      { text: '₹45 Lakhs', val: 4500000 },
-      { text: '₹60 Lakhs', val: 6000000 },
-      { text: '₹85 Lakhs', val: 8500000 },
-      { text: '₹1.1 Cr', val: 11000000 },
-      { text: '₹1.3 Cr', val: 13000000 },
-      { text: '₹1.4 Cr', val: 14000000 },
-      { text: '₹1.5 Cr', val: 15000000 },
-      { text: '₹1.8 Cr', val: 18000000 },
-      { text: '₹2.2 Cr', val: 22000000 },
-      { text: '₹2.5 Cr', val: 25000000 },
-      { text: '₹3.2 Cr', val: 32000000 },
-      { text: '₹4.5 Cr', val: 45000000 },
-      { text: '₹5.5 Cr', val: 55000000 }
+      { text: 'Rs. 45 Lakhs', val: 4500000 },
+      { text: 'Rs. 60 Lakhs', val: 6000000 },
+      { text: 'Rs. 85 Lakhs', val: 8500000 },
+      { text: 'Rs. 1.1 Cr', val: 11000000 },
+      { text: 'Rs. 1.3 Cr', val: 13000000 },
+      { text: 'Rs. 1.4 Cr', val: 14000000 },
+      { text: 'Rs. 1.5 Cr', val: 15000000 },
+      { text: 'Rs. 1.8 Cr', val: 18000000 },
+      { text: 'Rs. 2.2 Cr', val: 22000000 },
+      { text: 'Rs. 2.5 Cr', val: 25000000 },
+      { text: 'Rs. 3.2 Cr', val: 32000000 },
+      { text: 'Rs. 4.5 Cr', val: 45000000 },
+      { text: 'Rs. 5.5 Cr', val: 55000000 }
     ];
 
     for (let i = 0; i < 26; i++) {
@@ -118,7 +126,7 @@ export async function seedDatabase(shouldDisconnect = true) {
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
-    if (shouldDisconnect) {
+    if (standalone) {
       await mongoose.disconnect();
       console.log('Disconnected from MongoDB.');
     }

@@ -592,7 +592,7 @@ async function startServer() {
     if (propertiesCount === 0) {
       console.log('Seeding properties database because it is empty...');
       const { seedDatabase } = require('./seed');
-      await seedDatabase(false);
+      await seedDatabase(false); // false = standalone mode off, reuse existing connection
     }
 
     // Start WhatsApp client worker
