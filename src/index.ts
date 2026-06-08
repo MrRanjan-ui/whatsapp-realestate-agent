@@ -591,8 +591,8 @@ async function startServer() {
     const propertiesCount = await Property.countDocuments({});
     if (propertiesCount === 0) {
       console.log('Seeding properties database because it is empty...');
-      const seedScript = require('./seed');
-      // Running seed file logic directly
+      const { seedDatabase } = require('./seed');
+      await seedDatabase(false);
     }
 
     // Start WhatsApp client worker

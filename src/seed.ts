@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Property } from './db/models';
 import { config } from './config';
 
-async function seed() {
+export async function seedDatabase(shouldDisconnect = true) {
   try {
     console.log(`Connecting to MongoDB at ${config.MONGODB_URI}...`);
     await mongoose.connect(config.MONGODB_URI);
@@ -118,9 +118,13 @@ async function seed() {
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
-    await mongoose.disconnect();
-    console.log('Disconnected from MongoDB.');
+    if (shouldDisconnect) {
+      await mongoose.disconnect();
+      console.log('Disconnected from MongoDB.');
+    }
   }
 }
 
-seed();
+if (require.main === module) {
+  seedDatabase(true);
+}
